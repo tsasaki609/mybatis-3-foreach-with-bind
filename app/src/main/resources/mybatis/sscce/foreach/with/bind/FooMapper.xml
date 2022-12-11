@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.sscce.foreach.with.bind.FooMapper">
+  <select id="countBar" resultType="int">
+    SELECT count(*) FROM bar
+    <where>
+      <foreach item="id" collection="query"
+        open="id IN (" separator="," close=")">
+        <bind name="_id" value="id.asText()"/>
+        #{_id}
+      </foreach>
+    </where>
+  </select>
+</mapper>

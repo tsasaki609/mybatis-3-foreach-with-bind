@@ -3,12 +3,22 @@
  */
 package mybatis.sscce.foreach.with.bind;
 
-public class App {
-    public String getGreeting() {
-        return "Hello World!";
-    }
+import java.io.InputStream;
+import java.util.List;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
-    public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+public class App {
+    public static void main(String[] args) throws Exception {
+        String resource = "mybatis-config.xml";
+        InputStream inputStream = Resources.getResourceAsStream(resource);
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            Integer result = session.getMapper(FooMapper.class).countBar(List.of(new BarId("test001"), new BarId("test002")));
+            System.out.println(result);
+        }
     }
 }
